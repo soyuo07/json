@@ -3,6 +3,9 @@ function objectMap(obj, layer) {
     if (!layer) {
         layer = 0;
     }
+    if("string" === typeof obj) {
+        return '"' + obj.replace(/"/g, '\\"') + '"';
+    }
     if ("object" !== typeof obj) {
         return obj;
     }
@@ -11,8 +14,10 @@ function objectMap(obj, layer) {
     }
     let res = "";
     Object.keys(obj).map(key => {
-        if ("object" == typeof obj[key]) {
+        if ("object" === typeof obj[key]) {
             res += (layer ? " ".repeat(layer) : "") + key + " :\n" + objectMap(obj[key], layer + addLayer) + "\n";
+        } else if ("string" === typeof obj[key]) {
+            res += (layer ? " ".repeat(layer) : "") + key + " : \"" + obj.replace(/"/g, '\\"') + '"\n';
         } else {
             res += (layer ? " ".repeat(layer) : "") + key + " : " + obj[key] + "\n";
         }
